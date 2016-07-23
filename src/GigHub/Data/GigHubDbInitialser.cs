@@ -19,10 +19,10 @@ namespace GigHub.Data
             if (_context.Genres.Any()) return;
 
             _context.Genres.AddRange(
-                new Genre { Name = "Jazz" },
-                new Genre { Name = "Blues"},
-                new Genre { Name = "Rock"},
-                new Genre { Name = "Country"}
+                new Genre {Name = "Jazz"},
+                new Genre {Name = "Blues"},
+                new Genre {Name = "Rock"},
+                new Genre {Name = "Country"}
             );
 
             _context.SaveChanges();
