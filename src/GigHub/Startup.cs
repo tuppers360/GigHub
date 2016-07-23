@@ -88,6 +88,8 @@ namespace GigHub
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            GigHubDbInitialser.Initialise(app.ApplicationServices);
         }
     }
 }
