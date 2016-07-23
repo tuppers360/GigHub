@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{EC8F7E00-3FA2-4937-A6F7-1847F57703A5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{071FA854-EAB0-4964-A986-39C6226D16ED}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "GigHub", "src\GigHub\GigHub.xproj", "{4FFF46E1-9A94-4E41-8898-796F3E99D888}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4FFF46E1-9A94-4E41-8898-796F3E99D888}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FFF46E1-9A94-4E41-8898-796F3E99D888}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FFF46E1-9A94-4E41-8898-796F3E99D888}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FFF46E1-9A94-4E41-8898-796F3E99D888}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4FFF46E1-9A94-4E41-8898-796F3E99D888} = {EC8F7E00-3FA2-4937-A6F7-1847F57703A5}
+	EndGlobalSection
+EndGlobal
