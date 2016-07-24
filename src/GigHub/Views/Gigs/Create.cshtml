@@ -7,7 +7,7 @@
 
 <h2>Add a Gig</h2>
 
-<form asp-action="Create">
+<form asp-action="Create" asp-controller="Gigs">
     <div class="form-horizontal">
         <h4>Gig</h4>
         <hr />
@@ -36,7 +36,7 @@
         <div class="form-group">
             <label asp-for="Genre" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                @Html.DropDownListFor(m => m.Genre, new SelectList(Model.Genres, "Id", "Name"), "", new {@class="form-control"})
+                @Html.DropDownListFor(m => m.Genre, new SelectList(Model.Genres, "Id", "Name"), "", new {@class = "form-control"})
                 <span asp-validation-for="Genre" class="text-danger"></span>
             </div>
         </div>
@@ -48,9 +48,9 @@
     </div>
 </form>
 
-<div>
+@*<div>
     <a asp-action="Index">Back to List</a>
-</div>
+</div>*@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

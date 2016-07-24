@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using GigHub.Data;
 
 namespace GigHub.Migrations
@@ -88,8 +89,7 @@ namespace GigHub.Migrations
 
                     b.Property<DateTime>("DateTime");
 
-                    b.Property<byte?>("GenreId")
-                        .IsRequired();
+                    b.Property<byte>("GenreId");
 
                     b.Property<string>("Venue")
                         .IsRequired()

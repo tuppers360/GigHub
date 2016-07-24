@@ -1,18 +1,29 @@
+using System;
 using System.Linq;
+using System.Threading.Tasks;
 using GigHub.Data;
 using GigHub.Models.GigViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using GigHub.Models;
 
 namespace GigHub.Controllers
 {
+    [Authorize]
     public class GigsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public GigsController(ApplicationDbContext context)
+        public GigsController(
+            ApplicationDbContext context, 
+            UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
+
         public IActionResult Create()
         {
             var viewModel = new GigFormViewModel()
@@ -21,6 +32,28 @@ namespace GigHub.Controllers
             };
 
             return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(GigFormViewModel viewModel)
+        {
+            var gig = new Gig
+            {
+                ArtistId = (await GetCurrentUserAsync()).Id,
+                DateTime = DateTime.Parse(string.Format("{0} {1}", viewModel.Date, viewModel.Time)),
+                GenreId = viewModel.Genre,
+                Venue = viewModel.Venue
+            };
+
+            _context.Gigs.Add(gig);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        private Task<ApplicationUser> GetCurrentUserAsync()
+        {
+            return _userManager.GetUserAsync(HttpContext.User);
         }
     }
 }
