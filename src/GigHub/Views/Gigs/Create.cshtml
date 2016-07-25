@@ -8,28 +8,29 @@
 <h2>Add a Gig</h2>
 
 <form asp-action="Create" asp-controller="Gigs" asp-antiforgery="true">
+    <p class="alert alert-info">
+        All fields are <strong>required</strong>.
+    </p>
     <div class="form-horizontal">
-        <h4>Gig</h4>
-        <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
             <label asp-for="Venue" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Venue" class="form-control" />
+                <input asp-for="Venue" autofocus="autofocus" class="form-control"/>
                 <span asp-validation-for="Venue" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
             <label asp-for="Date" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Date" class="form-control" />
+                <input asp-for="Date" placeholder="eg. 1 Jan 2015" class="form-control"/>
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
             <label asp-for="Time" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Time" class="form-control"/>
+                <input asp-for="Time" placeholder="eg. 20:00" class="form-control"/>
                 <span asp-validation-for="Time" class="text-danger"></span>
             </div>
         </div>
@@ -42,7 +43,7 @@
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary"/>
             </div>
         </div>
     </div>
