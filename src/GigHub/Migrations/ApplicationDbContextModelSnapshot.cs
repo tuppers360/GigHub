@@ -69,6 +69,21 @@ namespace GigHub.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("GigHub.Models.Attendance", b =>
+                {
+                    b.Property<int>("GigId");
+
+                    b.Property<string>("AttendeeId");
+
+                    b.HasKey("GigId", "AttendeeId");
+
+                    b.HasIndex("AttendeeId");
+
+                    b.HasIndex("GigId");
+
+                    b.ToTable("Attendances");
+                });
+
             modelBuilder.Entity("GigHub.Models.Genre", b =>
                 {
                     b.Property<byte>("Id")
@@ -213,6 +228,19 @@ namespace GigHub.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("GigHub.Models.Attendance", b =>
+                {
+                    b.HasOne("GigHub.Models.ApplicationUser", "Attendee")
+                        .WithMany()
+                        .HasForeignKey("AttendeeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("GigHub.Models.Gig", "Gig")
+                        .WithMany()
+                        .HasForeignKey("GigId")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("GigHub.Models.Gig", b =>

@@ -20,6 +20,7 @@ namespace GigHub.Migrations
                     EmailConfirmed = table.Column<bool>(nullable: false),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
+                    Name = table.Column<string>(maxLength: 100, nullable: false),
                     NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
                     PasswordHash = table.Column<string>(nullable: true),
@@ -189,6 +190,30 @@ namespace GigHub.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Attendances",
+                columns: table => new
+                {
+                    GigId = table.Column<int>(nullable: false),
+                    AttendeeId = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Attendances", x => new { x.GigId, x.AttendeeId });
+                    table.ForeignKey(
+                        name: "FK_Attendances_AspNetUsers_AttendeeId",
+                        column: x => x.AttendeeId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Attendances_Gigs_GigId",
+                        column: x => x.GigId,
+                        principalTable: "Gigs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
                 table: "AspNetUsers",
@@ -199,6 +224,16 @@ namespace GigHub.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Attendances_AttendeeId",
+                table: "Attendances",
+                column: "AttendeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Attendances_GigId",
+                table: "Attendances",
+                column: "GigId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Gigs_ArtistId",
@@ -244,7 +279,7 @@ namespace GigHub.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Gigs");
+                name: "Attendances");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -262,13 +297,16 @@ namespace GigHub.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Genres");
+                name: "Gigs");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Genres");
         }
     }
 }

@@ -8,7 +8,7 @@ using GigHub.Data;
 namespace GigHub.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160725132127_Initial")]
+    [Migration("20160725165733_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,6 +34,10 @@ namespace GigHub.Migrations
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 100);
 
                     b.Property<string>("NormalizedEmail")
                         .HasAnnotation("MaxLength", 256);
@@ -64,6 +68,21 @@ namespace GigHub.Migrations
                         .HasName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("GigHub.Models.Attendance", b =>
+                {
+                    b.Property<int>("GigId");
+
+                    b.Property<string>("AttendeeId");
+
+                    b.HasKey("GigId", "AttendeeId");
+
+                    b.HasIndex("AttendeeId");
+
+                    b.HasIndex("GigId");
+
+                    b.ToTable("Attendances");
                 });
 
             modelBuilder.Entity("GigHub.Models.Genre", b =>
@@ -210,6 +229,19 @@ namespace GigHub.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("GigHub.Models.Attendance", b =>
+                {
+                    b.HasOne("GigHub.Models.ApplicationUser", "Attendee")
+                        .WithMany()
+                        .HasForeignKey("AttendeeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("GigHub.Models.Gig", "Gig")
+                        .WithMany()
+                        .HasForeignKey("GigId")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("GigHub.Models.Gig", b =>
