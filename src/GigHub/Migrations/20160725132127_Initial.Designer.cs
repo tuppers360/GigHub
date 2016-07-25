@@ -8,7 +8,7 @@ using GigHub.Data;
 namespace GigHub.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160723185157_Initial")]
+    [Migration("20160725132127_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -88,10 +88,9 @@ namespace GigHub.Migrations
                     b.Property<string>("ArtistId")
                         .IsRequired();
 
-                    b.Property<DateTime>("GetDateTime");
+                    b.Property<DateTime>("DateTime");
 
-                    b.Property<byte?>("GenreId")
-                        .IsRequired();
+                    b.Property<byte>("GenreId");
 
                     b.Property<string>("Venue")
                         .IsRequired()
