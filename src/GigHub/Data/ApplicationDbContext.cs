@@ -12,6 +12,8 @@ namespace GigHub.Data
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<Following> Followings { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<UserNotification> UserNotifications { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -41,26 +43,31 @@ namespace GigHub.Data
                 .WithMany()
                 .HasForeignKey(g => g.ArtistId);
 
-            builder.Entity<Gig>()
-                .Property(g => g.ArtistId)
-                .IsRequired();
-
             builder.Entity<Attendance>()
                 .HasKey(a => new { a.GigId, a.AttendeeId });
 
-            builder.Entity<Attendance>()
-                .HasOne(g => g.Gig)
-                .WithMany(a=>a.Attendees)
-                .HasForeignKey(g=>g.GigId);
+            builder.Entity<UserNotification>()
+                .HasKey(n => new { n.UserId, n.NotificationId });
+
+            builder.Entity<UserNotification>()
+                .HasOne(n => n.User)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Following>()
                 .HasKey(f => new { f.FollowerId, f.FolloweeId });
 
             builder.Entity<Following>()
-                .HasOne(e => e.Followee).WithMany(f => f.Followers).HasForeignKey(e=>e.FolloweeId).OnDelete(DeleteBehavior.Restrict);
+                .HasOne(e => e.Followee)
+                .WithMany(f => f.Followers)
+                .HasForeignKey(e=>e.FolloweeId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Following>()
-                .HasOne(f => f.Follower).WithMany(e => e.Followees).HasForeignKey(f=>f.FollowerId).OnDelete(DeleteBehavior.Restrict);
+                .HasOne(f => f.Follower)
+                .WithMany(e => e.Followees)
+                .HasForeignKey(f=>f.FollowerId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
