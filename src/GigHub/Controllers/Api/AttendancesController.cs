@@ -1,13 +1,13 @@
+using System.Linq;
 using System.Threading.Tasks;
 using GigHub.Data;
+using GigHub.Dtos;
 using GigHub.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
-using System.Linq;
-using GigHub.Dtos;
+using Microsoft.AspNetCore.Mvc;
 
-namespace GigHub.Controllers
+namespace GigHub.Controllers.Api
 {
     [Produces("application/json")]
     [Route("api/[controller]")]

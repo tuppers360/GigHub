@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using GigHub.Models;
 using GigHub.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using Remotion.Linq.Clauses;
 
 namespace GigHub.Controllers
 {
@@ -30,7 +31,7 @@ namespace GigHub.Controllers
         {
             var userId = (await GetCurrentUserAsync()).Id;
             var gigs = _context.Gigs
-                .Where(g => g.ArtistId == userId && g.DateTime > DateTime.Now)
+                .Where(g => g.ArtistId == userId && g.DateTime > DateTime.Now && !g.IsCancelled)
                 .Include(g=>g.Genre)
                 .ToList();
 
@@ -40,12 +41,15 @@ namespace GigHub.Controllers
         {
             var userId = (await GetCurrentUserAsync()).Id;
 
-            var gigs = _context.Attendances
-                .Where(a => a.AttendeeId == userId)
-                .Select(a => a.Gig)
-                .Include(g => g.Artist)
-                .Include(g => g.Genre)
-                .ToList();
+            //TODO: Will require review when EF updates API for Include and tree design for Includes
+            var gigs =
+                _context.Attendances.Where(a => a.AttendeeId == userId)
+                    .Include(g => g.Gig)
+                    .ThenInclude(a => a.Artist)
+                    .Include(g => g.Gig)
+                    .ThenInclude(g => g.Genre)
+                    .ToList()
+                    .Select(a => a.Gig);
 
             var viewModel = new GigsViewModel()
             {
@@ -53,6 +57,7 @@ namespace GigHub.Controllers
                 ShowActions = User.Identity.IsAuthenticated,
                 Heading = "Gigs I'm Attending"
             };
+
             return View("Gigs", viewModel);
         }
 
@@ -130,7 +135,6 @@ namespace GigHub.Controllers
 
             return RedirectToAction("Mine", "Gigs");
         }
-
         private Task<ApplicationUser> GetCurrentUserAsync()
         {
             return _userManager.GetUserAsync(HttpContext.User);
