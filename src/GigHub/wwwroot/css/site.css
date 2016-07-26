@@ -162,3 +162,12 @@ h6,
     .gigs > li .details .genre {
         font-size: 13px;
     }
+
+.gigs > li .actions {
+    font-size: 12px;
+    display: none;
+}
+
+.gigs > li:hover .actions {
+    display: block;
+}

@@ -1,13 +1,14 @@
 @model GigHub.Models.GigViewModels.GigFormViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = Model.Heading;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Add a Gig</h2>
+<h2>@Model.Heading</h2>
 
-<form asp-action="Create" asp-controller="Gigs" asp-antiforgery="true">
+<form asp-action="@Model.Action" asp-controller="Gigs" asp-antiforgery="true">
+    @Html.HiddenFor(m=>m.Id)
     <p class="alert alert-info">
         All fields are <strong>required</strong>.
     </p>
