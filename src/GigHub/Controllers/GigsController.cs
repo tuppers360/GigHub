@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using GigHub.Models;
+using GigHub.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace GigHub.Controllers
 {
@@ -21,6 +23,26 @@ namespace GigHub.Controllers
         {
             _context = context;
             _userManager = userManager;
+        }
+
+        public async Task<IActionResult> Attending()
+        {
+            var userId = (await GetCurrentUserAsync()).Id;
+
+            var gigs = _context.Attendances
+                .Where(a => a.AttendeeId == userId)
+                .Select(a => a.Gig)
+                .Include(g => g.Artist)
+                .Include(g => g.Genre)
+                .ToList();
+
+            var viewModel = new GigsViewModel()
+            {
+                UpcomingGigs = gigs,
+                ShowActions = User.Identity.IsAuthenticated,
+                Heading = "Gigs I'm Attending"
+            };
+            return View("Gigs", viewModel);
         }
 
         public IActionResult Create()

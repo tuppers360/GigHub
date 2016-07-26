@@ -10,6 +10,8 @@ namespace GigHub.Data
         public DbSet<Gig> Gigs { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Attendance> Attendances { get; set; }
+        public DbSet<Following> Followings { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
@@ -24,10 +26,23 @@ namespace GigHub.Data
             builder.Entity<Attendance>()
                 .HasOne(a => a.Gig)
                 .WithMany()
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Attendance>()
-                .HasKey(a => new { a.GigId, a.AttendeeId });          
+                .HasKey(a => new { a.GigId, a.AttendeeId });
+
+            builder.Entity<Following>()
+                .HasKey(f => new { f.FollowerId, f.FolloweeId });
+
+            builder.Entity<ApplicationUser>()
+                .HasMany(u => u.Followers)
+                .WithOne(f => f.Followee)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<ApplicationUser>()
+                .HasMany(u => u.Followees)
+                .WithOne(f => f.Follower)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
