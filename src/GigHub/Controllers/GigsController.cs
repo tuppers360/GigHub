@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using GigHub.Data;
@@ -25,6 +26,16 @@ namespace GigHub.Controllers
             _userManager = userManager;
         }
 
+        public async Task<IActionResult> Mine()
+        {
+            var userId = (await GetCurrentUserAsync()).Id;
+            var gigs = _context.Gigs
+                .Where(g => g.ArtistId == userId && g.DateTime > DateTime.Now)
+                .Include(g=>g.Genre)
+                .ToList();
+
+            return View(gigs);
+        }
         public async Task<IActionResult> Attending()
         {
             var userId = (await GetCurrentUserAsync()).Id;
@@ -76,7 +87,7 @@ namespace GigHub.Controllers
             _context.Gigs.Add(gig);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Mine", "Gigs");
         }
 
         private Task<ApplicationUser> GetCurrentUserAsync()
