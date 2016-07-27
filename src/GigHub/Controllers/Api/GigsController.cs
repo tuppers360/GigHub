@@ -5,6 +5,7 @@ using GigHub.Data;
 using GigHub.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace GigHub.Controllers.Api
 {
@@ -16,7 +17,7 @@ namespace GigHub.Controllers.Api
         private readonly UserManager<ApplicationUser> _userManager;
 
         public GigsController(
-            ApplicationDbContext context, 
+            ApplicationDbContext context,
             UserManager<ApplicationUser> userManager)
         {
             _context = context;
@@ -28,39 +29,31 @@ namespace GigHub.Controllers.Api
         {
             var userId = (await GetCurrentUserAsync()).Id;
 
-            var gig = _context.Gigs.Single(g => g.Id == id && g.ArtistId == userId);
+            var gig = _context.Gigs
+                .Include(g => g.Attendances)
+                .ThenInclude(a => a.Attendee)
+                .Include(a=>a.Attendances)
+                .ThenInclude(a=>a.Gig)
+                .ToList()
+                .Single(g => g.Id == id && g.ArtistId == userId);
 
             if (gig.IsCancelled)
                 return NotFound();
 
             gig.IsCancelled = true;
 
-            var notification = new Notification()
-            {
-                DateTime = DateTime.Now,
-                Gig = gig,
-                NotificationType = NotificationType.GigCanceled
-            };
+            var notification = Notification.GigCanceled(gig);
 
-            var attendees = _context.Attendances
-                .Where(a => a.GigId == gig.Id)
-                .Select(a => a.Attendee)
-                .ToList();
-
-            foreach (var attendee in attendees)
+            foreach (var attendee in gig.Attendances.Select(a => a.Attendee))
             {
-                var userNotification = new UserNotification
-                {
-                    User = attendee,
-                    Notification = notification
-                };
-                _context.UserNotifications.Add(userNotification);
+                attendee.Notify(notification);
             }
 
             await _context.SaveChangesAsync();
 
             return Ok();
         }
+
         private Task<ApplicationUser> GetCurrentUserAsync()
         {
             return _userManager.GetUserAsync(HttpContext.User);

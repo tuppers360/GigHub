@@ -46,12 +46,22 @@ namespace GigHub.Data
             builder.Entity<Attendance>()
                 .HasKey(a => new { a.GigId, a.AttendeeId });
 
+            builder.Entity<Attendance>()
+                .HasOne(a => a.Gig)
+                .WithMany(g => g.Attendances)
+                .OnDelete(DeleteBehavior.Restrict);
+
             builder.Entity<UserNotification>()
                 .HasKey(n => new { n.UserId, n.NotificationId });
 
             builder.Entity<UserNotification>()
                 .HasOne(n => n.User)
-                .WithMany()
+                .WithMany(u=>u.UserNotifications)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<UserNotification>()
+                .HasOne(n => n.Notification)
+                .WithOne()
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Following>()

@@ -147,8 +147,7 @@ namespace GigHub.Migrations
 
                     b.Property<DateTime>("DateTime");
 
-                    b.Property<int?>("GigId")
-                        .IsRequired();
+                    b.Property<int>("GigId");
 
                     b.Property<int>("NotificationType");
 
@@ -173,7 +172,8 @@ namespace GigHub.Migrations
 
                     b.HasKey("UserId", "NotificationId");
 
-                    b.HasIndex("NotificationId");
+                    b.HasIndex("NotificationId")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -294,7 +294,7 @@ namespace GigHub.Migrations
                         .HasForeignKey("AttendeeId");
 
                     b.HasOne("GigHub.Models.Gig", "Gig")
-                        .WithMany()
+                        .WithMany("Attendances")
                         .HasForeignKey("GigId");
                 });
 
@@ -330,11 +330,11 @@ namespace GigHub.Migrations
             modelBuilder.Entity("GigHub.Models.UserNotification", b =>
                 {
                     b.HasOne("GigHub.Models.Notification", "Notification")
-                        .WithMany()
-                        .HasForeignKey("NotificationId");
+                        .WithOne()
+                        .HasForeignKey("GigHub.Models.UserNotification", "NotificationId");
 
                     b.HasOne("GigHub.Models.ApplicationUser", "User")
-                        .WithMany()
+                        .WithMany("UserNotifications")
                         .HasForeignKey("UserId");
                 });
 

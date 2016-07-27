@@ -8,8 +8,8 @@ using GigHub.Data;
 namespace GigHub.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160726154221_AmendFluentApi")]
-    partial class AmendFluentApi
+    [Migration("20160726231945_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -141,6 +141,46 @@ namespace GigHub.Migrations
                     b.ToTable("Gigs");
                 });
 
+            modelBuilder.Entity("GigHub.Models.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("DateTime");
+
+                    b.Property<int>("GigId");
+
+                    b.Property<int>("NotificationType");
+
+                    b.Property<DateTime?>("OriginalDateTime");
+
+                    b.Property<string>("OriginalVenue");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GigId");
+
+                    b.ToTable("Notifications");
+                });
+
+            modelBuilder.Entity("GigHub.Models.UserNotification", b =>
+                {
+                    b.Property<string>("UserId");
+
+                    b.Property<int>("NotificationId");
+
+                    b.Property<bool>("IsRead");
+
+                    b.HasKey("UserId", "NotificationId");
+
+                    b.HasIndex("NotificationId")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserNotifications");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
                 {
                     b.Property<string>("Id");
@@ -255,7 +295,7 @@ namespace GigHub.Migrations
                         .HasForeignKey("AttendeeId");
 
                     b.HasOne("GigHub.Models.Gig", "Gig")
-                        .WithMany("Attendees")
+                        .WithMany("Attendances")
                         .HasForeignKey("GigId");
                 });
 
@@ -279,6 +319,24 @@ namespace GigHub.Migrations
                     b.HasOne("GigHub.Models.Genre", "Genre")
                         .WithMany()
                         .HasForeignKey("GenreId");
+                });
+
+            modelBuilder.Entity("GigHub.Models.Notification", b =>
+                {
+                    b.HasOne("GigHub.Models.Gig", "Gig")
+                        .WithMany()
+                        .HasForeignKey("GigId");
+                });
+
+            modelBuilder.Entity("GigHub.Models.UserNotification", b =>
+                {
+                    b.HasOne("GigHub.Models.Notification", "Notification")
+                        .WithOne()
+                        .HasForeignKey("GigHub.Models.UserNotification", "NotificationId");
+
+                    b.HasOne("GigHub.Models.ApplicationUser", "User")
+                        .WithMany("UserNotifications")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>

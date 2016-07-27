@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using GigHub.Data;
+using GigHub.Data.Mappings;
 using GigHub.Models;
 using GigHub.Services;
 
@@ -53,6 +55,8 @@ namespace GigHub
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+
+            AutoMapperConfiguration.Configure();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -109,6 +109,8 @@ namespace GigHub.Controllers
                 Venue = viewModel.Venue
             };
 
+            gig.Created();
+
             _context.Gigs.Add(gig);
             await _context.SaveChangesAsync();
 
@@ -126,10 +128,12 @@ namespace GigHub.Controllers
             }
 
             var userId = (await GetCurrentUserAsync()).Id;
-            var gig = _context.Gigs.Single(g => g.Id == viewModel.Id && g.ArtistId == userId);
-            gig.Venue = viewModel.Venue;
-            gig.DateTime = viewModel.GetDateTime();
-            gig.GenreId = viewModel.Genre;
+            var gig = _context.Gigs
+                .Include(g=>g.Attendances)
+                .ThenInclude(a=>a.Attendee)
+                .Single(g => g.Id == viewModel.Id && g.ArtistId == userId);
+
+            gig.Modify(viewModel.GetDateTime(), viewModel.Venue, viewModel.Genre);
 
             await _context.SaveChangesAsync();
 
