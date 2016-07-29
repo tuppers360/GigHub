@@ -9,6 +9,7 @@ using GigHub.Data;
 using GigHub.Data.Mappings;
 using GigHub.Models;
 using GigHub.Services;
+using Newtonsoft.Json.Serialization;
 
 namespace GigHub
 {
@@ -49,7 +50,10 @@ namespace GigHub
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddMvc();
+            //TODO: Check if this can be changed to pretty output for visual astetics when debugging in IE
+            services.AddMvc()
+                    .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
+
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
