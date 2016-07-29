@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using GigHub.Models;
 using GigHub.ViewModels;
 using Microsoft.EntityFrameworkCore;
-using Remotion.Linq.Clauses;
 
 namespace GigHub.Controllers
 {

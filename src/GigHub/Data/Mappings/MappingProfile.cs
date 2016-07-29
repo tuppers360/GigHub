@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
-using GigHub.Controllers.Api;
+﻿using AutoMapper;
 using GigHub.Dtos;
 using GigHub.Models;
 
-namespace GigHub.Data
+namespace GigHub.Data.Mappings
 {
     public class MappingProfile : Profile
     {

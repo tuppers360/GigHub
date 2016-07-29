@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication;
-
-namespace GigHub.Models
+﻿namespace GigHub.Models
 {
     public enum NotificationType
     {
