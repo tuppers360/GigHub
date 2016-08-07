@@ -5,6 +5,18 @@
 }
 
 <h1>@Model.Heading</h1>
+<form asp-action="Search" asp-controller="Gigs" asp-antiforgery="true">
+    <div class="form-group">
+        <div class="col-md-10">
+            <div id="searchGigs" class="input-group">
+                <input asp-for="SearchTerm" autofocus="autofocus" class="form-control" />
+                <span class="input-group-addon">
+                    <i class="glyphicon glyphicon-search"></i>
+                </span>
+            </div>
+        </div>
+    </div>
+</form>
 <ul class="gigs voffset4">
     @foreach (var gig in Model.UpcomingGigs)
     {

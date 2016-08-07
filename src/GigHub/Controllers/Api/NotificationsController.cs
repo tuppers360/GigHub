@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 namespace GigHub.Controllers.Api
 {
     [Produces("application/json")]
-    [Route("api/Notifications")]
+    [Route("api/[controller]")]
     [Authorize]
     public class NotificationsController : Controller
     {
@@ -27,6 +27,7 @@ namespace GigHub.Controllers.Api
             _userManager = userManager;
         }
 
+        [HttpGet]
         public async Task<IEnumerable<NotificationDto>> GetNewNotifications()
         {
             var userId = (await GetCurrentUserAsync()).Id;
@@ -59,6 +60,23 @@ namespace GigHub.Controllers.Api
                 OriginalVenue = n.OriginalVenue,
                 NotificationType = n.NotificationType
             });
+        }
+
+        [HttpPost]
+        [Route("MarkAsRead")]
+        public async Task<IActionResult> MarkAsRead()
+        {
+            var userId = (await GetCurrentUserAsync()).Id;
+
+            var notifications = _context.UserNotifications
+                .Where(un => un.UserId == userId && !un.IsRead)
+                .ToList();
+
+            notifications.ForEach(n=>n.Read());
+
+            await _context.SaveChangesAsync();
+
+            return new NoContentResult();
         }
 
         private Task<ApplicationUser> GetCurrentUserAsync()

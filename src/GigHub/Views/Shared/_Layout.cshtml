@@ -1,72 +1,155 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - GigHub</title>
 
     <environment names="Development">
         <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css"/>
-        <link rel="stylesheet" href="~/css/site.css"/>
+        <link href="~/css/site.min.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="~/css/animate.css"/>
     </environment>
     <environment names="Staging,Production">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Lato:400,700|Montserrat:400,700" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"/>
-        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true"/>
+        <link href="~/css/site.min.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="~/css/animate.min.css" asp-append-version="true"/>
     </environment>
     @Html.ApplicationInsightsJavaScript(TelemetryConfiguration)
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">GigHub</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Gigs" asp-action="Create">Add a Gig</a></li>
-                </ul>
-                @await Html.PartialAsync("_LoginPartial")
-            </div>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">GigHub</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Gigs" asp-action="Create">Add a Gig</a>
+                </li>
+            </ul>
+            @await Html.PartialAsync("_LoginPartial")
         </div>
     </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2016 - GigHub</p>
-        </footer>
-    </div>
+</div>
+<div class="container body-content">
+    @RenderBody()
+    <hr/>
+    <footer>
+        <p>&copy; 2016 - GigHub</p>
+    </footer>
+</div>
 
-    <environment names="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
-        <script src="~/js/bootbox.min.js" asp-append-version="true"></script>
-    </environment>
-    <environment names="Staging,Production">
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery">
-        </script>
-        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"
-                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
-        </script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
-        <script src="~/js/bootbox.min.js" asp-append-version="true"></script>
-    </environment>
+<environment names="Development">
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/bootbox.min.js" asp-append-version="true"></script>
+    <script src="~/js/underscore-min.js"></script>
+    <script src="~/js/moment.js"></script>
+</environment>
+<environment names="Staging,Production">
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+            asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+            asp-fallback-test="window.jQuery">
 
-    @RenderSection("scripts", required: false)
+
+    
+    </script>
+    <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"
+            asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+            asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
+
+
+    
+    </script>
+    <script src="~/js/site.min.js" asp-append-version="true"></script>
+    <script src="~/js/bootbox.min.js" asp-append-version="true"></script>
+    <script src="~/js/underscore-min.js" sp-append-version="true"></script>
+    <script src="~/js/moment.js"></script>
+</environment>
+
+@RenderSection("scripts", required: false)
+<script type="text/x-template" id="notifications-template">
+    <ul class="notifications">
+        <%
+        _.each(notifications, function(notification){
+        if(notification.notificationType == 1) { %>
+        <li><span class="highlight"><%= notification.gig.artist.name %></span> has cancelled the gig at <%= notification.gig.venue %> at <%= moment(notification.gig.dateTime).format("D MMM HH:mm") %></li>
+        <% }
+
+        else if (notification.notificationType == 2) {
+        var changes = [],
+        originalValues = [],
+        newValues = [];
+
+        if (notification.originalVenue != notification.gig.venue) {
+        changes.push('venue');
+        originalValues.push(notification.originalVenue);
+        newValues.push(notification.gig.venue);
+        }
+
+        if (notification.originalDateTime != notification.gig.dateTime) {
+        changes.push('date/time');
+        originalValues.push(moment(notification.originalDateTime).format("D MMM HH:mm"));
+        newValues.push(moment(notification.gig.dateTime).format("D MMM HH:mm"));
+        }
+        %>
+        <li><span class="highlight"><%= notification.gig.artist.name %></span> has changed the <%= changes.join(' and ') %> of the gig from <%= originalValues.join('/') %> to <%= newValues.join('/') %></li>
+        <%
+        }
+        })
+        %>
+    </ul>
+</script>
+<script>
+    $(document)
+        .ready(function() {
+            $.getJSON("/api/Notifications/",
+                function(notifications) {
+                    if (notifications.length === 0)
+                        return;
+                    $(".js-notifications-count")
+                        .text(notifications.length)
+                        .removeClass("hide")
+                        .addClass("animated bounceInDown");
+
+                    $(".notifications")
+                        .popover({
+                            html: true,
+                            title: "Notifications",
+                            content: function() {
+                                var compiled = _.template($("#notifications-template").html());
+                                return compiled({ notifications: notifications });
+                            },
+                            placement: "bottom",
+                            template:
+                                '<div class="popover popover-notifications" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
+                        }).on("shown.bs.popover", function() {
+                            $.post("/api/Notifications/MarkAsRead")
+                                .done(function() {
+                                    $(".js-notifications-count")
+                                        .text("")
+                                        .addClass("hide");
+                                });
+                        });
+                });
+        });
+
+</script>
 </body>
 </html>

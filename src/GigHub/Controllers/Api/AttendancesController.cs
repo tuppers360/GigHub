@@ -42,7 +42,7 @@ namespace GigHub.Controllers.Api
             _context.Attendances.Add(attendance);
             await _context.SaveChangesAsync();
 
-            return Ok(attendance);
+            return Ok();
         }
 
         private Task<ApplicationUser> GetCurrentUserAsync()
