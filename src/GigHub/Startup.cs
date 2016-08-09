@@ -7,7 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using GigHub.Data;
 using GigHub.Data.Mappings;
+using GigHub.Data.Repositories;
 using GigHub.Models;
+using GigHub.Persistance;
 using GigHub.Services;
 using Newtonsoft.Json.Serialization;
 
@@ -58,6 +60,12 @@ namespace GigHub
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+
+            services.AddSingleton<IAttendanceRepository, AttendanceRepository>();
+            services.AddSingleton<IGenreRepository, GenreRepository>();
+            services.AddSingleton<IGigRepository, GigRepository>();
+            services.AddSingleton<IFollowingRepository, FollowingRepository>();
+            services.AddSingleton<IUnitOfWork, UnitOfWork>();
 
             AutoMapperConfiguration.Configure();
         }

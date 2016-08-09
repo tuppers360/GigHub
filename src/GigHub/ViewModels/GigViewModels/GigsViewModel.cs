@@ -2,7 +2,7 @@
 using System.Linq;
 using GigHub.Models;
 
-namespace GigHub.ViewModels
+namespace GigHub.ViewModels.GigViewModels
 {
     public class GigsViewModel
     {

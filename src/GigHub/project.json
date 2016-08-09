@@ -44,8 +44,8 @@
       "version": "1.0.0-preview2-final",
       "type": "build"
     },
-    "BundlerMinifier.Core": "2.1.258",
-    "AutoMapper.Data": "1.0.0-beta1"
+    "AutoMapper.Data": "1.0.0-beta1",
+    "BundlerMinifier.Core": "2.2.281"
   },
 
   "tools": {
