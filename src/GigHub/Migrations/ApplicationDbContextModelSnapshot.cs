@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using GigHub.Data;
+using GigHub.Persistance;
 
 namespace GigHub.Migrations
 {

@@ -1,13 +1,13 @@
 ﻿using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using GigHub.Core.Models;
+using GigHub.Core.ViewModels.AccountViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-using GigHub.Models;
-using GigHub.Models.AccountViewModels;
 using GigHub.Services;
 
 namespace GigHub.Controllers

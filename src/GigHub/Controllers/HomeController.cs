@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using GigHub.Data.Repositories;
-using GigHub.Models;
-using GigHub.ViewModels;
-using GigHub.ViewModels.GigViewModels;
+using GigHub.Core.Models;
+using GigHub.Core.ViewModels.GigViewModels;
+using GigHub.Persistance;
+using GigHub.Persistance.Repositories;
 using Microsoft.AspNetCore.Identity;
 
 namespace GigHub.Controllers

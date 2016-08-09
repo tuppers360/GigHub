@@ -1,9 +1,10 @@
 using System.Linq;
 using System.Threading.Tasks;
+using GigHub.Core;
+using GigHub.Core.Models;
+using GigHub.Core.ViewModels.GigViewModels;
 using GigHub.Data;
-using GigHub.Models;
 using GigHub.Persistance;
-using GigHub.ViewModels.GigViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
