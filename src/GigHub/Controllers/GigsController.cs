@@ -2,12 +2,12 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using GigHub.Data;
+using GigHub.Models;
 using GigHub.Models.GigViewModels;
+using GigHub.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using GigHub.Models;
-using GigHub.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace GigHub.Controllers
@@ -19,23 +19,13 @@ namespace GigHub.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
 
         public GigsController(
-            ApplicationDbContext context, 
+            ApplicationDbContext context,
             UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;
         }
 
-        public async Task<IActionResult> Mine()
-        {
-            var userId = (await GetCurrentUserAsync()).Id;
-            var gigs = _context.Gigs
-                .Where(g => g.ArtistId == userId && g.DateTime > DateTime.Now && !g.IsCancelled)
-                .Include(g=>g.Genre)
-                .ToList();
-
-            return View(gigs);
-        }
         public async Task<IActionResult> Attending()
         {
             var userId = (await GetCurrentUserAsync()).Id;
@@ -50,47 +40,28 @@ namespace GigHub.Controllers
                     .ToList()
                     .Select(a => a.Gig);
 
-            var viewModel = new GigsViewModel()
+            var attendances = _context.Attendances
+                .Where(a => a.AttendeeId == userId && a.Gig.DateTime > DateTime.Now)
+                .ToList()
+                .ToLookup(a => a.GigId);
+
+            var viewModel = new GigsViewModel
             {
                 UpcomingGigs = gigs,
                 ShowActions = User.Identity.IsAuthenticated,
-                Heading = "Gigs I'm Attending"
+                Heading = "Gigs I'm Attending",
+                Attendances = attendances
             };
 
             return View("Gigs", viewModel);
         }
 
-        [HttpPost]
-        public IActionResult Search(GigsViewModel viewModel)
-        {
-            return RedirectToAction("Index", "Home", new {query = viewModel.SearchTerm});
-        }
-
         public IActionResult Create()
         {
-            var viewModel = new GigFormViewModel()
+            var viewModel = new GigFormViewModel
             {
                 Genres = _context.Genres.ToList(),
                 Heading = "Add a Gig"
-            };
-
-            return View("GigForm", viewModel);
-        }
-
-        public async Task<IActionResult> Edit(int id)
-        {
-            var userId = (await GetCurrentUserAsync()).Id;
-            var gig = _context.Gigs.Single(g => g.Id == id && g.ArtistId == userId);
-
-            var viewModel = new GigFormViewModel()
-            {
-                Heading = "Edit a Gig",
-                Id = gig.Id,
-                Genres = _context.Genres.ToList(),
-                Date = gig.DateTime.ToString("d MMM yyyy"),
-                Time = gig.DateTime.ToString("HH:mm"),
-                Genre = gig.GenreId,
-                Venue = gig.Venue
             };
 
             return View("GigForm", viewModel);
@@ -122,6 +93,68 @@ namespace GigHub.Controllers
             return RedirectToAction("Mine", "Gigs");
         }
 
+        [AllowAnonymous]
+        public async Task<IActionResult> Details(int id)
+        {
+            var gig = _context.Gigs
+                .Include(g => g.Artist)
+                .Include(g => g.Genre)
+                .SingleOrDefault(g => g.Id == id);
+
+            if (gig == null)
+                return NotFound();
+
+            var viewModel = new GigDetailsViewModel {Gig = gig};
+
+            if (!User.Identity.IsAuthenticated) return View("Details", viewModel);
+
+            var userId = (await GetCurrentUserAsync()).Id;
+
+            viewModel.IsAttending = _context.Attendances
+                .Any(a => a.GigId == gig.Id && a.AttendeeId == userId);
+
+            viewModel.IsFollowing = _context.Followings
+                .Any(f => f.FolloweeId == gig.ArtistId && f.FollowerId == userId);
+
+            return View("Details", viewModel);
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var userId = (await GetCurrentUserAsync()).Id;
+            var gig = _context.Gigs.Single(g => g.Id == id && g.ArtistId == userId);
+
+            var viewModel = new GigFormViewModel
+            {
+                Heading = "Edit a Gig",
+                Id = gig.Id,
+                Genres = _context.Genres.ToList(),
+                Date = gig.DateTime.ToString("d MMM yyyy"),
+                Time = gig.DateTime.ToString("HH:mm"),
+                Genre = gig.GenreId,
+                Venue = gig.Venue
+            };
+
+            return View("GigForm", viewModel);
+        }
+
+        public async Task<IActionResult> Mine()
+        {
+            var userId = (await GetCurrentUserAsync()).Id;
+            var gigs = _context.Gigs
+                .Where(g => g.ArtistId == userId && g.DateTime > DateTime.Now && !g.IsCancelled)
+                .Include(g => g.Genre)
+                .ToList();
+
+            return View(gigs);
+        }
+
+        [HttpPost]
+        public IActionResult Search(GigsViewModel viewModel)
+        {
+            return RedirectToAction("Index", "Home", new { query = viewModel.SearchTerm });
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(GigFormViewModel viewModel)
@@ -134,8 +167,8 @@ namespace GigHub.Controllers
 
             var userId = (await GetCurrentUserAsync()).Id;
             var gig = _context.Gigs
-                .Include(g=>g.Attendances)
-                .ThenInclude(a=>a.Attendee)
+                .Include(g => g.Attendances)
+                .ThenInclude(a => a.Attendee)
                 .Single(g => g.Id == viewModel.Id && g.ArtistId == userId);
 
             gig.Modify(viewModel.GetDateTime(), viewModel.Venue, viewModel.Genre);
@@ -144,6 +177,7 @@ namespace GigHub.Controllers
 
             return RedirectToAction("Mine", "Gigs");
         }
+
         private Task<ApplicationUser> GetCurrentUserAsync()
         {
             return _userManager.GetUserAsync(HttpContext.User);

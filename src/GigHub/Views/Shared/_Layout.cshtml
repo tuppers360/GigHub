@@ -61,6 +61,11 @@
     <script src="~/js/bootbox.min.js" asp-append-version="true"></script>
     <script src="~/js/underscore-min.js"></script>
     <script src="~/js/moment.js"></script>
+    <script src="~/js/app/services/attendanceService.js"></script>
+    <script src="~/js/app/services/followingService.js"></script>
+    <script src="~/js/app/controllers/gigsController.js"></script>
+    <script src="~/js/app/controllers/gigDetailsController.js"></script>
+    <script src="~/js/app/app.js"></script>
 </environment>
 <environment names="Staging,Production">
     <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
@@ -73,14 +78,13 @@
     <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"
             asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
             asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
-
-
     
     </script>
     <script src="~/js/site.min.js" asp-append-version="true"></script>
     <script src="~/js/bootbox.min.js" asp-append-version="true"></script>
     <script src="~/js/underscore-min.js" sp-append-version="true"></script>
     <script src="~/js/moment.js"></script>
+    <script src="~/js/app/app.js"></script>
 </environment>
 
 @RenderSection("scripts", required: false)
@@ -139,14 +143,16 @@
                             placement: "bottom",
                             template:
                                 '<div class="popover popover-notifications" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
-                        }).on("shown.bs.popover", function() {
-                            $.post("/api/Notifications/MarkAsRead")
-                                .done(function() {
-                                    $(".js-notifications-count")
-                                        .text("")
-                                        .addClass("hide");
-                                });
-                        });
+                        })
+                        .on("shown.bs.popover",
+                            function() {
+                                $.post("/api/Notifications/MarkAsRead")
+                                    .done(function() {
+                                        $(".js-notifications-count")
+                                            .text("")
+                                            .addClass("hide");
+                                    });
+                            });
                 });
         });
 

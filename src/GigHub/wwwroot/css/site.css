@@ -93,6 +93,8 @@ textarea {
 }
 .gigs > li .details .genre {
   font-size: 13px;
+  display: block;
+  margin-bottom: 4px;
 }
 .gigs > li .actions {
   font-size: 12px;

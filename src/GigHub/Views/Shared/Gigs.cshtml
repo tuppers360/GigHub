@@ -9,7 +9,7 @@
     <div class="form-group">
         <div class="col-md-10">
             <div id="searchGigs" class="input-group">
-                <input asp-for="SearchTerm" autofocus="autofocus" class="form-control" />
+                <input asp-for="SearchTerm" autofocus="autofocus" class="form-control"/>
                 <span class="input-group-addon">
                     <i class="glyphicon glyphicon-search"></i>
                 </span>
@@ -17,7 +17,7 @@
         </div>
     </div>
 </form>
-<ul class="gigs voffset4">
+<ul id="gigs" class="gigs voffset4">
     @foreach (var gig in Model.UpcomingGigs)
     {
         <li>
@@ -31,15 +31,13 @@
             </div>
             <div class="details">
                 <span class="artist">
-                    @gig.Artist.Name
+                    <a asp-action="Details" asp-controller="Gigs" asp-route-id="@gig.Id">
+                        @gig.Artist.Name
+                    </a>
                     
                     @if (gig.IsCancelled)
                     {
                         <span class="label lebel-warning">Canelled</span>
-                    }
-                    @if (Model.ShowActions)
-                    {
-                        <button class="btn btn-link btn-sm js-toggle-follow" data-user-id="@gig.ArtistId">Follow</button>
                     }
                 </span>
                 <span class="genre">
@@ -47,7 +45,12 @@
                 </span>
                 @if (Model.ShowActions && !gig.IsCancelled)
                 {
-                    <button data-gig-id="@gig.Id" class="btn btn-default btn-sm pull-right js-toggle-attendance">Going?</button>
+                    <button data-gig-id="@gig.Id"
+                            class="btn 
+                            @(Model.Attendances.Contains(gig.Id) ? "btn-info" : "btn-default")
+                            btn-sm js-toggle-attendance">
+                        Going?
+                    </button>
                 }
             </div>
         </li>
@@ -56,32 +59,10 @@
 
 @section scripts{
     <script>
-        $(document).ready(function () {
-            $(".js-toggle-attendance").click(function (e) {
-                var button = $(e.target);
-                $.post("/api/attendances", { gigId: button.attr("data-gig-id") })
-                    .done(function () {
-                        button
-                            .removeClass("btn-default")
-                            .addClass("btn-info")
-                            .text("Going");
-                    })
-                    .fail(function () {
-                        alert("Something failed!");
-                    });
+        $(document)
+            .ready(function() {
+                GigsController.init("#gigs");
             });
-
-            $(".js-toggle-follow").click(function (e) {
-                var button = $(e.target);
-                $.post("/api/followings", { followeeId: button.attr("data-user-id") })
-                    .done(function () {
-                        button.text("Following");
-                    })
-                    .fail(function () {
-                        alert("Something failed!");
-                    });
-            });
-        });
     </script>
 }
 

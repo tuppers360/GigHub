@@ -6,6 +6,6 @@
         public Gig Gig { get; set; }
 
         public string AttendeeId { get; set; }
-        public ApplicationUser Attendee { get; set; }  
+        public ApplicationUser Attendee { get; set; }
     }
 }

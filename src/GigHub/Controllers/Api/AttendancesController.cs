@@ -25,18 +25,35 @@ namespace GigHub.Controllers.Api
             _userManager = userManager;
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAttendance(int id)
+        {
+            var userId = (await GetCurrentUserAsync()).Id;
+
+            var attendance = _context.Attendances
+                .SingleOrDefault(a => a.AttendeeId == userId && a.GigId == id);
+
+            if (attendance == null)
+                return NotFound();
+
+            _context.Attendances.Remove(attendance);
+            await _context.SaveChangesAsync();
+
+            return Ok(id);
+        }
+
         [HttpPost]
         public async Task<IActionResult> PostAttendance(AttendanceDto dto)
         {
-            var user = await GetCurrentUserAsync();
+            var userId = (await GetCurrentUserAsync()).Id;
 
-            if (_context.Attendances.Any(a => a.AttendeeId == user.Id && a.GigId == dto.GigId))
+            if (_context.Attendances.Any(a => a.AttendeeId == userId && a.GigId == dto.GigId))
                 return BadRequest("The attendance already exists");
 
             var attendance = new Attendance
             {
                 GigId = dto.GigId,
-                AttendeeId = user.Id
+                AttendeeId = userId
             };
 
             _context.Attendances.Add(attendance);
